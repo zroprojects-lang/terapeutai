@@ -66,6 +66,13 @@ export default function RegisterPage() {
         setLoading(false)
         return
       }
+
+      // Send welcome email (non-blocking)
+      fetch('/api/auth/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email }),
+      }).catch(() => {}) // silently ignore errors
     }
 
     toast.success('Conta criada com sucesso!')
