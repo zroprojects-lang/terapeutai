@@ -126,35 +126,42 @@ async function fetchLatestEmail(historyId: string): Promise<string | null> {
 }
 
 function isFlowPayConfirmation(emailContent: string): boolean {
-  // TODO: Update these patterns after seeing a real FlowPay confirmation email
-  // Check for FlowPay sender or subject patterns
+  // FlowPay envia de team@flowpay.cash com assunto "Novo pagamento recebido"
   return (
-    emailContent.toLowerCase().includes('flowpay') ||
-    emailContent.toLowerCase().includes('pagamento confirmado') ||
-    emailContent.toLowerCase().includes('payment confirmed')
+    emailContent.includes('flowpay.cash') ||
+    emailContent.includes('Novo pagamento recebido') ||
+    emailContent.includes('Novo Pagamento')
   )
 }
 
 function extractPaymentInfo(emailContent: string): { customerEmail: string | null; plan: 'profissional' | 'clinica' } {
-  // TODO: Update these regex patterns after seeing a real FlowPay confirmation email
-  // The customer email should be in the UTM content parameter or in the email body
+  // Estrategia 1: email embutido no UTM utm_content (passado pelo botao de upgrade)
+  const utmEmailRegex = /utm_content=([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/
+  const utmMatch = emailContent.match(utmEmailRegex)
 
-  // Try to find email pattern in the content
-  const emailRegex = /utm_content=([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/
-  const emailMatch = emailContent.match(emailRegex)
+  // Estrategia 2: campo "Comprador" na tabela do email da FlowPay
+  // Formato esperado: "Comprador\nNome do Cliente\nemail@exemplo.com"
+  const compradorEmailRegex = /Comprador[\s\S]{0,100}?([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/i
+  const compradorMatch = emailContent.match(compradorEmailRegex)
 
-  // Fallback: generic email pattern in body
-  const genericEmailRegex = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g
-  const allEmails = emailContent.match(genericEmailRegex) || []
+  // Estrategia 3: qualquer email no corpo, excluindo os conhecidos
+  const allEmailsRegex = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g
+  const allEmails = emailContent.match(allEmailsRegex) || []
+  const fallbackEmail = allEmails.find(
+    (e) =>
+      !e.includes('flowpay') &&
+      !e.includes('terapeutai') &&
+      e !== 'tidilodo@gmail.com' &&
+      e !== 'team@flowpay.cash'
+  ) || null
 
-  // Filter out known system emails
-  const customerEmail = emailMatch?.[1] ||
-    allEmails.find(e => !e.includes('flowpay') && !e.includes('terapeutai') && e !== 'tidilodo@gmail.com') ||
-    null
+  const customerEmail = utmMatch?.[1] || compradorMatch?.[1] || fallbackEmail
 
-  // Determine plan from email content
-  // TODO: Update after seeing real email format
-  const plan = emailContent.toLowerCase().includes('clinica') ? 'clinica' : 'profissional'
+  // Determinar plano pelo utm_term ou pelo produto no email
+  const isClinica =
+    emailContent.toLowerCase().includes('utm_term=clinica') ||
+    emailContent.toLowerCase().includes('clinica')
+  const plan = isClinica ? 'clinica' : 'profissional'
 
   return { customerEmail, plan }
 }
