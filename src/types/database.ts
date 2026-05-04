@@ -69,3 +69,17 @@ export interface AuditLog {
 export interface PatientWithSessions extends Patient {
   sessions: Session[]
 }
+
+export type AppointmentStatus = 'agendado' | 'realizado' | 'cancelado' | 'falta'
+
+export interface Appointment {
+  id: string
+  therapist_id: string
+  patient_id: string
+  date: string
+  duration_minutes: number
+  status: AppointmentStatus
+  notes: string | null
+  created_at: string
+  updated_at: string
+}

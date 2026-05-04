@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import {
   LayoutDashboard,
   Users,
+  CalendarDays,
   FileText,
   Settings,
   LogOut,
@@ -16,7 +17,8 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Pacientes', href: '/patients', icon: Users },
-  { name: 'Sessoes', href: '/sessions/new', icon: FileText },
+  { name: 'Agenda', href: '/agenda', icon: CalendarDays },
+  { name: 'Nova Sessao', href: '/sessions/new', icon: FileText },
   { name: 'Configuracoes', href: '/settings', icon: Settings },
 ]
 

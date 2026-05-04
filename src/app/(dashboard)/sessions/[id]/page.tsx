@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ArrowLeft, Sparkles } from 'lucide-react'
+import { EditSessionDialog } from '@/components/sessions/edit-session-dialog'
+import { DeleteSessionDialog } from '@/components/sessions/delete-session-dialog'
 
 export default async function SessionDetailPage({
   params,
@@ -35,7 +37,7 @@ export default async function SessionDetailPage({
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <div>
+        <div className="flex-1">
           <h2 className="text-2xl font-bold tracking-tight">
             Sessao — {(session as any).patients?.name}
           </h2>
@@ -47,6 +49,10 @@ export default async function SessionDetailPage({
               year: 'numeric',
             })}
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <EditSessionDialog session={session} />
+          <DeleteSessionDialog sessionId={session.id} patientId={session.patient_id} />
         </div>
       </div>
 
