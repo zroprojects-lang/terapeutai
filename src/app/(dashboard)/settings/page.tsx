@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { ChangePasswordForm } from '@/components/settings/change-password-form'
+import { PlanSection } from '@/components/settings/plan-section'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -27,6 +28,8 @@ export default async function SettingsPage() {
         <h2 className="text-3xl font-bold tracking-tight">Configuracoes</h2>
         <p className="text-muted-foreground">Gerencie sua conta e preferencias.</p>
       </div>
+
+      {therapist && <PlanSection therapist={therapist} />}
 
       <Card>
         <CardHeader>

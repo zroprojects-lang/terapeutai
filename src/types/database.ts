@@ -13,6 +13,8 @@ export interface Therapist {
   specialty: TherapistSpecialty
   crp_number: string | null
   lgpd_consent_at: string | null
+  plan: 'gratuito' | 'profissional' | 'clinica'
+  plan_activated_at: string | null
   created_at: string
 }
 
