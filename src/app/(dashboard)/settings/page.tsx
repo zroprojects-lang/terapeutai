@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { ChangePasswordForm } from '@/components/settings/change-password-form'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -82,6 +83,8 @@ export default async function SettingsPage() {
           </p>
         </CardContent>
       </Card>
+
+      <ChangePasswordForm />
     </div>
   )
 }

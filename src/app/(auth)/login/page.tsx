@@ -62,6 +62,11 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="flex justify-end">
+                <Link href="/forgot-password" className="text-xs text-muted-foreground hover:underline">
+                  Esqueceu a senha?
+                </Link>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
