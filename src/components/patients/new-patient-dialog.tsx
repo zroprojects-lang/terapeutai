@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +18,7 @@ import {
 import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 
-export function NewPatientDialog() {
+export function NewPatientDialog({ onCreated }: { onCreated?: () => void } = {}) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState('')
@@ -29,7 +28,6 @@ export function NewPatientDialog() {
   const [initialComplaint, setInitialComplaint] = useState('')
   const [tags, setTags] = useState('')
   const [lgpdConsent, setLgpdConsent] = useState(false)
-  const router = useRouter()
   const supabase = createClient()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -65,7 +63,7 @@ export function NewPatientDialog() {
     toast.success('Paciente cadastrado com sucesso')
     setOpen(false)
     resetForm()
-    router.refresh()
+    onCreated?.()
   }
 
   function resetForm() {

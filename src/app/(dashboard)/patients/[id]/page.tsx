@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Separator } from '@/components/ui/separator'
 import { ArrowLeft, Plus } from 'lucide-react'
 import { MoodChart } from '@/components/charts/mood-chart'
+import { EditPatientDialog } from '@/components/patients/edit-patient-dialog'
+import { DeletePatientDialog } from '@/components/patients/delete-patient-dialog'
 
 export default async function PatientDetailPage({
   params,
@@ -55,12 +57,16 @@ export default async function PatientDetailPage({
             <p className="text-muted-foreground mt-1">{patient.initial_complaint}</p>
           )}
         </div>
-        <Link href={`/sessions/new?patient=${id}`}>
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Nova sessao
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href={`/sessions/new?patient=${id}`}>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Nova sessao
+            </Button>
+          </Link>
+          <EditPatientDialog patient={patient} />
+          <DeletePatientDialog patientId={patient.id} patientName={patient.name} />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">

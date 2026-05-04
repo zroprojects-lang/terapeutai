@@ -26,6 +26,7 @@ export default function NewSessionPage() {
   const [loading, setLoading] = useState(false)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiSummary, setAiSummary] = useState<string | null>(null)
+  const [aiPatterns, setAiPatterns] = useState<any>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
@@ -75,6 +76,7 @@ export default function NewSessionPage() {
       mood_rating: mood,
       tags: tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
       ai_summary: aiSummary,
+      ai_patterns: aiPatterns,
     }).select().single()
 
     if (error) {
@@ -112,6 +114,9 @@ export default function NewSessionPage() {
 
       const data = await res.json()
       setAiSummary(data.summary)
+      if (data.patterns) {
+        setAiPatterns(data.patterns)
+      }
 
       if (data.patterns?.themes?.length) {
         const currentTags = tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : []
