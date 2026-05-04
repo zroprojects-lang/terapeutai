@@ -1,5 +1,11 @@
 # TerapeutAI - Gestao Inteligente para Terapeutas
 
+## Status: MVP funcional em desenvolvimento local
+
+**Ultimo update: Mai 2026**
+
+---
+
 ## Visao Geral
 
 Plataforma SaaS de documentacao e gestao de pacientes para terapeutas holisticos e psicologos, com analise de padroes por IA. O diferencial e transformar anotacoes de sessoes em insights acionaveis: deteccao de padroes, evolucao do paciente e sugestoes de pontos de atencao.
@@ -47,7 +53,7 @@ Holisticos como expansao secundaria (menos regulacao, mas menor ticket).
 ## Diferencial Competitivo
 
 1. **IA aplicada ao prontuario** - Resumos automaticos, deteccao de padroes, alertas de regressao
-2. **Compliance LGPD nativo** - Criptografia, consentimento, audit log, portabilidade, direito ao esquecimento
+2. **Compliance LGPD nativo** - Consentimento, audit log, portabilidade, direito ao esquecimento
 3. **Nicho duplo** - Psicologos E holisticos no mesmo produto (abordagens configuráveis)
 4. **Custo acessivel** - Precificacao para realidade brasileira
 
@@ -55,165 +61,113 @@ Holisticos como expansao secundaria (menos regulacao, mas menor ticket).
 
 ## Funcionalidades
 
-### MVP (Semanas 1-4) - O minimo para validar
+### MVP - Implementado e funcionando
 
-- [ ] Auth (email + senha)
-- [ ] Cadastro e listagem de pacientes
-- [ ] Registro de sessao (texto livre + humor 1-10 + tags)
-- [ ] Timeline do paciente (historico de sessoes)
-- [ ] Resumo automatico da sessao por IA
-- [ ] Deteccao basica de padroes (frequencia de temas, variacao de humor)
-- [ ] Grafico de evolucao do humor ao longo do tempo
-- [ ] Export PDF do prontuario
-- [ ] Consentimento LGPD do terapeuta e registro de consentimento do paciente
-- [ ] Audit log basico (quem acessou o que, quando)
+- [x] Auth (email + senha via Supabase)
+- [x] Cadastro e listagem de pacientes
+- [x] Registro de sessao (texto livre + humor 1-10 + tags + duracao + status)
+- [x] Timeline do paciente (historico de sessoes)
+- [x] Resumo automatico da sessao por IA (Groq / Llama 3.3 70B)
+- [x] Deteccao de padroes: temas, pontos de atencao, percepcao de evolucao
+- [x] Grafico de evolucao do humor ao longo do tempo
+- [x] Export de dados do paciente (portabilidade LGPD - JSON)
+- [x] Consentimento LGPD do terapeuta e registro de consentimento do paciente
+- [x] Audit log (quem acessou o que, quando)
+- [x] Row Level Security no Supabase (isolamento por terapeuta)
+- [x] Dashboard com metricas do consultorio
+- [x] Pagina de configuracoes com info LGPD
 
 ### Fase 2 (Apos validacao com beta testers)
 
 - [ ] Agenda com recorrencia e lembretes por email
 - [ ] Controle financeiro (pagamentos por sessao, inadimplencia)
-- [ ] Dashboard com metricas do consultorio
-- [ ] IA avancada: sugestoes de pontos de atencao, alertas de regressao
+- [ ] IA avancada: alertas de regressao, padroes sazonais
 - [ ] Rastreamento multi-dimensional (ansiedade, humor, sono, energia, autoestima)
 - [ ] Autenticacao 2FA
 - [ ] Busca e filtros avancados
+- [ ] Export PDF do prontuario
 
 ### Fase 3 (Escala)
 
-- [ ] Planos pagos via Stripe ou Mercado Pago
+- [ ] Planos pagos via Mercado Pago
 - [ ] Onboarding guiado para novos terapeutas
 - [ ] Templates de prontuario por abordagem (TCC, psicanalitica, holisticas)
 - [ ] Relatorios avancados com IA
-- [ ] API para integracoes
 - [ ] App PWA otimizado para mobile
 
 ---
 
 ## Arquitetura Tecnica
 
-### Stack
+### Stack atual
 
-| Camada | Tecnologia | Justificativa |
-|--------|-----------|---------------|
-| Frontend | Next.js 14 (App Router) + TypeScript | SSR, API routes no mesmo projeto, ecossistema maduro |
-| UI | Tailwind CSS + shadcn/ui | Velocidade de desenvolvimento, design consistente |
-| Backend | Next.js API Routes | Mesmo deploy, sem servidor separado |
-| Banco de dados | Supabase (PostgreSQL) | Free tier generoso, Row Level Security, auth built-in |
-| Auth | Supabase Auth | Gratis ate 50k users, integrado |
-| IA | Claude API (Anthropic) | Qualidade superior para analise de texto em portugues |
-| Deploy | Vercel | Free tier, integrado com Next.js |
-| Email | Resend | Free tier 3k/mes, API simples |
+| Camada | Tecnologia | Custo |
+|--------|-----------|-------|
+| Frontend | Next.js 16 (App Router) + TypeScript | Gratis |
+| UI | Tailwind CSS v4 + shadcn/ui (base-ui) | Gratis |
+| Backend | Next.js API Routes | Gratis |
+| Banco de dados | Supabase (PostgreSQL) | Gratis ate 500MB |
+| Auth | Supabase Auth | Gratis ate 50k users |
+| IA | Groq API (Llama 3.3 70B) | Gratis (rate limits) |
+| Deploy | Vercel (local por enquanto) | Gratis |
 
 ### Custo estimado de infraestrutura
 
 | Fase | Users | Custo/mes |
 |------|-------|-----------|
-| MVP/Beta | 0-10 | R$ 0 (free tiers) |
-| Lancamento | 10-50 | R$ 50-100 |
-| Crescimento | 50-200 | R$ 150-300 |
-| Escala | 200-500 | R$ 300-500 |
+| MVP/Beta atual | 0-10 | R$ 0 |
+| Lancamento | 10-50 | R$ 0-50 |
+| Crescimento | 50-200 | R$ 100-200 |
+| Escala | 200-500 | R$ 200-400 |
 
 ### Estrutura do projeto
 
 ```
 terapeutai/
 ├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── (auth)/             # Rotas de login/registro
-│   │   │   ├── login/
-│   │   │   └── register/
+│   ├── app/
+│   │   ├── (auth)/             # Login e registro
 │   │   ├── (dashboard)/        # Area logada
-│   │   │   ├── dashboard/      # Pagina inicial
-│   │   │   ├── patients/       # Listagem e ficha do paciente
-│   │   │   │   └── [id]/       # Detalhes do paciente
-│   │   │   ├── sessions/       # Registro e historico de sessoes
-│   │   │   │   └── [id]/
-│   │   │   └── settings/       # Config do terapeuta
-│   │   ├── api/                # API Routes
-│   │   │   ├── patients/
+│   │   │   ├── dashboard/      # Metricas do consultorio
+│   │   │   ├── patients/       # Listagem + ficha do paciente
+│   │   │   │   └── [id]/       # Timeline, evolucao, dados
 │   │   │   ├── sessions/
-│   │   │   ├── ai/
-│   │   │   └── export/
+│   │   │   │   ├── new/        # Registro de sessao + IA
+│   │   │   │   └── [id]/       # Detalhe da sessao
+│   │   │   └── settings/       # Config + LGPD
+│   │   ├── api/
+│   │   │   ├── ai/summarize/   # Groq: resumo + padroes
+│   │   │   ├── patients/       # CRUD pacientes
+│   │   │   └── export/[id]/    # Export LGPD (JSON)
 │   │   ├── layout.tsx
 │   │   └── page.tsx            # Landing page
 │   ├── components/
 │   │   ├── ui/                 # shadcn/ui components
-│   │   ├── patients/           # Componentes de pacientes
-│   │   ├── sessions/           # Componentes de sessoes
-│   │   └── charts/             # Graficos de evolucao
+│   │   ├── patients/           # NewPatientDialog
+│   │   ├── charts/             # MoodChart (barras CSS)
+│   │   └── layout/             # Sidebar
 │   ├── lib/
-│   │   ├── supabase/           # Client e server Supabase
-│   │   ├── ai/                 # Integracao com Claude API
-│   │   ├── encryption.ts       # Criptografia de dados sensiveis
-│   │   └── validators.ts       # Schemas Zod
-│   ├── services/
-│   │   ├── patients.ts
-│   │   ├── sessions.ts
-│   │   └── ai-analysis.ts
-│   ├── hooks/                  # React hooks customizados
-│   └── types/                  # TypeScript types
+│   │   ├── supabase/           # client.ts, server.ts, middleware.ts
+│   │   ├── ai/                 # sanitize.ts, prompts.ts
+│   │   └── validators.ts       # Zod schemas
+│   └── types/database.ts       # TypeScript types
 ├── supabase/
-│   └── migrations/             # SQL migrations
-├── public/
-├── .env.local                  # Variaveis de ambiente (nao commitar)
-├── PROJETO.md                  # Este arquivo
-└── CLAUDE.md                   # Instrucoes para Claude Code
+│   └── migrations/
+│       └── 001_initial_schema.sql
+├── .env.local                  # Nao commitar
+├── .env.local.example
+├── PROJETO.md
+└── CLAUDE.md
 ```
 
-### Modelo de dados (MVP)
+### Modelo de dados
 
 ```
-therapists
-├── id: uuid (PK)
-├── email: varchar (unique)
-├── name: varchar
-├── specialty: enum (psicologo, holistico, ambos)
-├── crp_number: varchar (nullable, para psicologos)
-├── lgpd_consent_at: timestamp
-└── created_at: timestamp
-
-patients
-├── id: uuid (PK)
-├── therapist_id: uuid (FK -> therapists)
-├── name: varchar [ENCRYPTED]
-├── email: varchar [ENCRYPTED] (nullable)
-├── phone: varchar [ENCRYPTED] (nullable)
-├── birth_date: date [ENCRYPTED] (nullable)
-├── status: enum (ativo, inativo, alta)
-├── initial_complaint: text [ENCRYPTED]
-├── lgpd_consent_recorded: boolean
-├── lgpd_consent_at: timestamp (nullable)
-├── notes: text [ENCRYPTED]
-├── tags: jsonb
-├── created_at: timestamp
-└── updated_at: timestamp
-
-sessions
-├── id: uuid (PK)
-├── patient_id: uuid (FK -> patients)
-├── therapist_id: uuid (FK -> therapists)
-├── date: timestamp
-├── duration_minutes: integer
-├── status: enum (realizada, cancelada, falta)
-├── session_notes: text [ENCRYPTED]
-├── mood_rating: integer (1-10)
-├── tags: jsonb
-├── ai_summary: text [ENCRYPTED]
-├── ai_patterns: jsonb [ENCRYPTED]
-├── created_at: timestamp
-└── updated_at: timestamp
-
-audit_logs
-├── id: uuid (PK)
-├── therapist_id: uuid (FK -> therapists)
-├── action: varchar (CREATE, READ, UPDATE, DELETE, EXPORT)
-├── entity: varchar
-├── entity_id: uuid
-├── ip_address: varchar
-├── created_at: timestamp
+therapists         — perfil do terapeuta (1:1 com auth.users)
+patients           — pacientes do terapeuta (RLS por therapist_id)
+sessions           — sessoes de atendimento (RLS por therapist_id)
+audit_logs         — log LGPD de todas operacoes sensiveis
 ```
-
-Nota sobre criptografia: Campos marcados [ENCRYPTED] usam criptografia application-level (AES-256-CBC). Isso significa que buscas e ordenacoes nesses campos nao funcionam diretamente no banco. Para o MVP, busca de pacientes sera pelo ID ou por campos nao cifrados (tags, status). Se busca por nome for critica, considerar criptografia deterministica ou busca em indice separado.
 
 ---
 
@@ -237,96 +191,57 @@ Para holisticos:
 - Sem conselho regulador com forca de lei (vantagem para compliance)
 - LGPD se aplica integralmente
 
-### Implementacao tecnica
+### Implementacao atual
 
-| Requisito LGPD | Implementacao |
-|-----------------|---------------|
-| Consentimento | Termo digital no cadastro do terapeuta + registro de consentimento do paciente |
-| Criptografia em repouso | AES-256-CBC nos campos sensiveis |
-| Criptografia em transito | HTTPS (TLS 1.3) via Vercel |
-| Direito ao esquecimento | Endpoint de exclusao completa de dados do paciente |
-| Portabilidade | Export JSON + PDF dos dados do paciente |
-| Audit log | Registro automatico de toda operacao em dados sensiveis |
-| Minimizacao | Coletar apenas dados necessarios para o atendimento |
-| Retencao | Respeitar 5 anos CFP; apos isso, alerta para exclusao |
-| DPO | Terceirizado (necessario antes de escalar, nao no MVP beta) |
+| Requisito LGPD | Status | Implementacao |
+|----------------|--------|---------------|
+| Consentimento | Feito | Checkbox no registro do terapeuta + campo no cadastro do paciente |
+| Criptografia em transito | Feito | HTTPS via Vercel/Supabase |
+| Isolamento de dados | Feito | Row Level Security no Supabase |
+| Audit log | Feito | Tabela audit_logs com todas operacoes |
+| Portabilidade | Feito | GET /api/export/[patientId] retorna JSON completo |
+| Anonimizacao para IA | Feito | sanitizeForAI() remove nome, CPF, telefone, email antes de enviar |
+| Criptografia em repouso | Pendente Fase 2 | AES-256-CBC application-level |
+| Direito ao esquecimento | Pendente Fase 2 | Endpoint de exclusao completa |
+| DPO | Pendente escala | Terceirizado antes de 50+ clientes |
+| Termos de uso / PP | Pendente beta | Advogado antes de abrir para o publico |
 
 ### IA e LGPD
 
-- Dados enviados para API de IA devem ser **anonimizados** (substituir nomes, CPFs, telefones, emails por placeholders)
+- Dados anonimizados antes de enviar para Groq (nome, CPF, telefone, email substituidos)
 - IA nunca recebe dados identificaveis do paciente
-- Resultados da IA armazenados criptografados junto da sessao
 - Disclaimer em toda saida de IA: "Sugestao gerada por IA para consideracao do profissional"
 - IA nao faz diagnostico — apenas identifica padroes e sugere pontos de atencao
 
-### Custos legais estimados
+### Custos legais pendentes
 
 | Item | Custo estimado | Quando |
 |------|----------------|--------|
 | Advogado: termos de uso + politica de privacidade | R$ 1.500-3.000 | Antes do beta publico |
 | DPO terceirizado | R$ 500-2.000/mes | Antes de escalar (50+ clientes) |
-| Registro no ROPA (Registro de Operacoes) | Incluso no advogado | Antes do beta publico |
 
 ---
 
-## Funcionalidades de IA - Detalhamento
+## Funcionalidades de IA
 
-### Nivel 1: Assistente de documentacao (MVP)
+### Implementado (Nivel 1)
 
 **Resumo automatico da sessao**
 - Input: Notas brutas do terapeuta apos a sessao
-- Output: Resumo estruturado com temas-chave e pontos de atencao
-- Modelo: Claude API (Sonnet para custo-beneficio)
-- Custo estimado: ~R$ 0.01-0.03 por resumo
+- Output: Resumo + temas + pontos de atencao + percepcao de evolucao
+- Modelo: Llama 3.3 70B via Groq API (gratis)
+- Anonimizacao automatica antes de enviar
 
-**Deteccao basica de padroes**
-- Analisar ultimas N sessoes e identificar temas recorrentes
-- Variacao do humor ao longo do tempo
-- Frequencia de presenca/ausencia
+**Deteccao de padroes por sessao**
+- Temas recorrentes identificados automaticamente
+- Percepcao de evolucao: melhora / estavel / piora com justificativa
+- Tags sugeridas automaticamente com base nos temas
 
-### Nivel 2: Analise avancada (Fase 2)
+### Proximo (Nivel 2 - Fase 2)
 
-**Rastreamento multi-dimensional**
-- Alem do humor, rastrear: ansiedade, sono, energia, autoestima, relacionamentos
-- Graficos de evolucao por dimensao
-- Deteccao automatica de melhora/piora/estagnacao
-
-**Alertas inteligentes**
-- Paciente faltou N vezes consecutivas
-- Regressao significativa detectada
-- Padrao sazonal identificado
-- Muito tempo sem sessao registrada
-
-### Nivel 3: Sugestoes (Fase 3)
-
-**Pontos de atencao para o terapeuta**
-- "Paciente mencionou tema X em 7 das ultimas 10 sessoes"
-- "Humor medio caiu de 7 para 4 nos ultimos 3 meses"
-- "Considerar revisar abordagem atual dado plato nos ultimos 5 encontros"
-
-Todas as sugestoes acompanhadas de disclaimer obrigatorio.
-
-### Prompt base para analise (referencia)
-
-```
-Voce e um assistente de documentacao clinica para terapeutas.
-
-REGRAS:
-- NAO faca diagnosticos
-- NAO prescreva tratamentos
-- NAO use linguagem definitiva ("o paciente tem", "isso indica")
-- USE linguagem sugestiva ("o paciente parece apresentar", "pode ser relevante explorar")
-- APENAS identifique padroes e sugira pontos de atencao
-- RESPONDA em portugues brasileiro
-
-TAREFA:
-Analise as notas da sessao e o historico resumido. Retorne:
-1. Resumo da sessao (3-5 frases)
-2. Temas principais identificados
-3. Padroes observados em relacao ao historico
-4. Pontos de atencao para o terapeuta
-5. Percepcao de evolucao (melhora / estavel / piora) com justificativa
-```
+- Alertas: paciente faltou N vezes, regressao detectada, platô prolongado
+- Analise historica: comparar evolucao ao longo de meses
+- Rastreamento multi-dimensional (ansiedade, sono, energia, autoestima)
 
 ---
 
@@ -340,19 +255,15 @@ Analise as notas da sessao e o historico resumido. Retorne:
 | Essencial | R$ 39/mes | Ate 25 | 15 resumos/mes | Terapeutas em inicio |
 | Profissional | R$ 79/mes | Ilimitado | Ilimitado + padroes + alertas | Consultorio estabelecido |
 
-Nota: Precos sao hipotese inicial. Validar com entrevistas antes de implementar cobranca.
-
 ### Projecao (conservadora)
 
 | Marco | Quando | Users pagantes | MRR |
 |-------|--------|----------------|-----|
-| Beta | Mes 2 | 0 (gratis) | R$ 0 |
+| Beta privado | Mes 2 | 0 (gratis) | R$ 0 |
 | Lancamento | Mes 3 | 5-10 | R$ 300-600 |
 | Tracao inicial | Mes 6 | 30-50 | R$ 1.500-3.000 |
 | Break-even infra | Mes 4 | ~10 | R$ 500 |
 | Meta ano 1 | Mes 12 | 100-200 | R$ 6.000-12.000 |
-
-Break-even de infra e rapido (~10 clientes). Break-even considerando tempo investido depende do custo de oportunidade do fundador.
 
 ---
 
@@ -367,8 +278,8 @@ Break-even de infra e rapido (~10 clientes). Break-even considerando tempo inves
 ### Pos-lancamento
 
 1. **Conteudo organico** - Posts no Instagram/LinkedIn sobre gestao para terapeutas e LGPD
-2. **SEO** - Blog com artigos: "Como fazer prontuario terapeutico", "LGPD para psicologos", "Gestao de consultorio"
-3. **Comunidades** - Participar (sem spam) de grupos de terapeutas no WhatsApp/Telegram/Facebook
+2. **SEO** - Blog com artigos: "Como fazer prontuario terapeutico", "LGPD para psicologos"
+3. **Comunidades** - Grupos de terapeutas no WhatsApp/Telegram/Facebook
 4. **Parcerias** - Escolas de formacao, supervisores clinicos, associacoes
 5. **Product-led** - Plano gratuito generoso, trial 14 dias do Pro
 
@@ -378,80 +289,64 @@ Break-even de infra e rapido (~10 clientes). Break-even considerando tempo inves
 
 | Risco | Probabilidade | Impacto | Mitigacao |
 |-------|---------------|---------|-----------|
-| Terapeutas nao confiam em nuvem para dados de pacientes | Alta | Alto | Transparencia sobre seguranca, criptografia visivel, depoimentos de beta testers |
-| Regulamentacao muda (CFP ou LGPD) | Media | Alto | Manter IA como sugestao, nunca diagnostico; acompanhar regulamentacao |
-| Provider de IA muda precos/termos | Media | Medio | Abstrair provider, poder trocar Claude por OpenAI ou local |
-| Churn alto apos primeiros meses | Media | Alto | Criar lock-in via historico de dados, evolucao do paciente |
-| Concorrente grande copia feature de IA | Media | Medio | Velocidade de execucao, nicho holistico, relacionamento com comunidade |
-| Complexidade de criptografia atrasa MVP | Media | Medio | Fase 1 com Supabase RLS + HTTPS; criptografia application-level na fase 2 |
+| Terapeutas nao confiam em nuvem | Alta | Alto | Transparencia, RLS visivel, depoimentos de beta testers |
+| Regulamentacao muda (CFP ou LGPD) | Media | Alto | IA sempre como sugestao, acompanhar regulamentacao |
+| Groq muda limites do free tier | Media | Medio | Estrutura abstrata — facil trocar para OpenAI ou Anthropic |
+| Churn alto apos primeiros meses | Media | Alto | Lock-in via historico de dados e evolucao do paciente |
+| Concorrente copia feature de IA | Media | Medio | Velocidade, nicho holistico, relacionamento com comunidade |
 
 ---
 
-## Roadmap de Execucao
+## Proximos Passos
 
-### Semana 0: Validacao (ANTES de codar)
+### Imediato (antes do beta)
+- [ ] Advogado para termos de uso e politica de privacidade
+- [ ] Desabilitar confirmacao de email no Supabase (producao)
+- [ ] Deploy no Vercel com dominio proprio
+- [ ] Testar fluxo completo com 2-3 terapeutas conhecidos
 
-- [ ] Entrevistar 10 terapeutas (5 psicologos, 5 holisticos)
-- [ ] Perguntar: quanto pagam hoje, o que incomoda, o que falta
-- [ ] Criar landing page com lista de espera
-- [ ] Meta: 50 emails cadastrados = sinal verde para continuar
-- [ ] Definir nome final do produto e registrar dominio
-
-### Semanas 1-2: Fundacao + Core
-
-- [ ] Setup Next.js + Supabase + Vercel
-- [ ] Auth (login/registro com Supabase Auth)
-- [ ] Layout base com sidebar (shadcn/ui)
-- [ ] CRUD pacientes (cadastro, listagem, ficha)
-- [ ] Consentimento LGPD no cadastro do terapeuta
-- [ ] Row Level Security no Supabase (terapeuta so ve seus dados)
-- [ ] Migration inicial do banco
-
-### Semanas 3-4: Sessoes + IA
-
-- [ ] Registro de sessao (notas + humor + tags)
-- [ ] Timeline do paciente (historico de sessoes)
-- [ ] Integracao Claude API para resumo automatico
-- [ ] Anonimizacao de dados antes de enviar para IA
-- [ ] Deteccao basica de padroes (temas recorrentes, variacao de humor)
-- [ ] Grafico simples de evolucao do humor
-- [ ] Export PDF do prontuario
-- [ ] Audit log basico
-
-### Semana 5: Beta privado
-
-- [ ] Convidar 5-10 terapeutas da lista de espera
-- [ ] Acompanhar uso, coletar feedback
-- [ ] Corrigir bugs criticos
-- [ ] Iterar baseado em feedback real
-
-### Apos validacao: Fase 2
-
+### Fase 2 (apos primeiros usuarios)
 - [ ] Agenda com recorrencia
 - [ ] Financeiro basico
-- [ ] Dashboard
-- [ ] IA avancada (alertas, multi-dimensional)
-- [ ] Planos pagos
-- [ ] 2FA
-- [ ] Advogado para termos e politica de privacidade
+- [ ] Criptografia application-level (AES-256)
+- [ ] Endpoint de exclusao completa (direito ao esquecimento)
+- [ ] Planos pagos (Mercado Pago)
 
 ---
 
-## Decisoes em aberto
+## Decisoes Tomadas
 
-- [ ] Nome definitivo do produto (TerapeutAI? TherapyOS? Outro?)
-- [ ] Criptografia application-level no MVP ou apenas na Fase 2?
-- [ ] Claude API ou OpenAI? (Claude recomendado por qualidade em portugues)
-- [ ] Mercado Pago ou Stripe para pagamentos? (Stripe mais facil, Mercado Pago mais brasileiro)
+| Decisao | Escolha | Motivo |
+|---------|---------|--------|
+| Stack | Next.js + Supabase + Vercel | Custo zero, deploy simples, auth pronto |
+| UI | shadcn/ui (base-ui v4) | Componentes prontos, acessiveis |
+| IA | Groq (Llama 3.3 70B) | Gratis, sem cartao, qualidade suficiente para MVP |
+| Banco | Supabase PostgreSQL | RLS nativo, auth integrado, free tier generoso |
+| Auth | Supabase Auth (email/senha) | Integrado, sem custo, suficiente para MVP |
+
+## Decisoes em Aberto
+
+- [ ] Nome definitivo (TerapeutAI esta bom ou mudar?)
+- [ ] Mercado Pago ou Stripe para pagamentos?
 - [ ] PWA desde o inicio ou apenas web responsivo?
+
+---
+
+## Credenciais e Servicos
+
+| Servico | Conta | Observacao |
+|---------|-------|------------|
+| Supabase | zroprojects@gmail.com | Projeto: terapeutai, regiao sa-east-1 |
+| Groq | - | Free tier, chave no .env.local |
+| Vercel | - | Ainda nao configurado |
 
 ---
 
 ## Referencias
 
-- LGPD: Lei 13.709/2018 - http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm
+- LGPD: Lei 13.709/2018
 - CFP Resolucao 001/2009 (Prontuario)
 - CFP Resolucao 011/2018 (Tecnologia)
 - Supabase Docs: https://supabase.com/docs
 - Next.js Docs: https://nextjs.org/docs
-- shadcn/ui: https://ui.shadcn.com
+- Groq Docs: https://console.groq.com/docs

@@ -47,34 +47,32 @@ export async function POST(request: NextRequest) {
 
   const prompt = buildSessionSummaryPrompt(sanitizedNotes, history)
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {
     return NextResponse.json(
-      { error: 'API de IA nao configurada. Configure ANTHROPIC_API_KEY no .env.local' },
+      { error: 'API de IA nao configurada. Configure GROQ_API_KEY no .env.local' },
       { status: 500 }
     )
   }
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3,
         max_tokens: 1024,
-        messages: [
-          { role: 'user', content: prompt },
-        ],
       }),
     })
 
     if (!response.ok) {
       const err = await response.text()
-      console.error('Anthropic API error:', err)
+      console.error('Groq API error:', err)
       return NextResponse.json(
         { error: 'Erro ao chamar API de IA' },
         { status: 500 }
@@ -82,16 +80,18 @@ export async function POST(request: NextRequest) {
     }
 
     const aiResponse = await response.json()
-    const content = aiResponse.content?.[0]?.text || ''
+    const content = aiResponse.choices?.[0]?.message?.content || ''
 
     let parsed
     try {
-      parsed = JSON.parse(content)
+      const jsonMatch = content.match(/\{[\s\S]*\}/)
+      parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : null
     } catch {
-      return NextResponse.json({
-        summary: content,
-        patterns: null,
-      })
+      return NextResponse.json({ summary: content, patterns: null })
+    }
+
+    if (!parsed) {
+      return NextResponse.json({ summary: content, patterns: null })
     }
 
     await supabase.from('audit_logs').insert({
