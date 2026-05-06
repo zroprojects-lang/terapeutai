@@ -2,43 +2,50 @@
 
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Brain, Calendar, TrendingUp, Shield, FileText } from 'lucide-react'
+import { Brain, Calendar, TrendingUp, Shield, FileText, Package, DollarSign } from 'lucide-react'
 
 const features = [
   {
     icon: Brain,
-    title: 'Prontuario com IA',
-    description: 'Registre sessoes e gere resumos automaticos com IA. Identifique padroes ao longo do tempo e tenha o historico completo do paciente em segundos.',
+    title: 'Prontuário Holístico com IA',
+    description: 'Registre sessões e gere resumos automáticos com IA que entende vocabulário energético, técnicas e protocolos holísticos. Sem traduzir para linguagem médica.',
     color: '#7C5C8A',
-    tag: 'Inteligencia Artificial',
+    tag: 'Inteligência Artificial',
+  },
+  {
+    icon: Package,
+    title: 'Pacotes de Sessões',
+    description: 'Venda e controle pacotes de 5, 10 ou mais sessões. Saiba exatamente quantas sessões cada cliente usou e quanto ainda tem disponível.',
+    color: '#E8985E',
+    tag: 'Gestão',
+  },
+  {
+    icon: DollarSign,
+    title: 'Controle Financeiro com PIX',
+    description: 'Registre pagamentos por PIX, dinheiro ou transferência. Veja quem pagou, quem está pendente e quanto você recebeu no mês.',
+    color: '#4A7C6F',
+    tag: 'Financeiro',
   },
   {
     icon: Calendar,
     title: 'Agenda Organizada',
-    description: 'Gerencie sua agenda com calendario visual. Agende consultas, controle faltas e mantenha sua rotina de atendimentos sob controle.',
+    description: 'Gerencie sua agenda com calendário visual. Agende atendimentos, controle faltas e mantenha sua rotina sob controle.',
     color: '#4A7C6F',
     tag: 'Produtividade',
   },
   {
     icon: TrendingUp,
-    title: 'Evolucao do Paciente',
-    description: 'Acompanhe a evolucao de humor e temas ao longo das sessoes com graficos visuais. Veja claramente quando o paciente esta progredindo.',
+    title: 'Evolução do Cliente',
+    description: 'Acompanhe a evolução de abertura energética e temas ao longo das sessões com gráficos visuais. Veja claramente quando o cliente está progredindo.',
     color: '#E8985E',
     tag: 'Insights',
   },
   {
-    icon: FileText,
-    title: 'Ficha Completa',
-    description: 'Cadastro detalhado com queixa inicial, historico, tags e notas. Tudo organizado e facil de encontrar na hora que voce precisar.',
-    color: '#4A7C6F',
-    tag: 'Organizacao',
-  },
-  {
     icon: Shield,
     title: '100% LGPD Compliant',
-    description: 'Dados dos seus pacientes protegidos por lei. Consentimento registrado, audit log, exportacao de dados e criptografia em transito.',
+    description: 'Dados dos seus clientes protegidos por lei. Consentimento registrado, exportação de dados e criptografia em trânsito.',
     color: '#7C5C8A',
-    tag: 'Seguranca',
+    tag: 'Segurança',
   },
 ]
 

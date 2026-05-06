@@ -36,7 +36,7 @@ export function Hero() {
               style={{ backgroundColor: '#4A7C6F20', color: '#4A7C6F' }}
             >
               <span>✨</span>
-              <span>Plataforma feita para terapeutas brasileiros</span>
+              <span>Plataforma feita para terapeutas holísticos brasileiros</span>
             </motion.div>
 
             <h1
@@ -49,15 +49,16 @@ export function Hero() {
               }}
             >
               Cuide dos seus{' '}
-              <span style={{ color: '#4A7C6F' }}>pacientes.</span>
+              <span style={{ color: '#4A7C6F' }}>clientes.</span>
               <br />
               A gente cuida da{' '}
               <span style={{ color: '#7C5C8A' }}>sua gestao.</span>
             </h1>
 
             <p className="text-lg mb-8 leading-relaxed" style={{ color: '#6B7280' }}>
-              Prontuario eletronico com IA, agenda e acompanhamento de evolucao — tudo em um so lugar.
-              Para que seu tempo seja dedicado ao que realmente importa: seus pacientes.
+              Prontuario holístico com IA, agenda e controle de pacotes — tudo em um so lugar para terapeutas holísticos.
+              <br className="hidden sm:block" />
+              <span className="text-sm">(Reiki, Constelação, Florais, Acupuntura e mais)</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">

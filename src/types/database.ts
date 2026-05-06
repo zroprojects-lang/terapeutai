@@ -47,6 +47,7 @@ export interface Session {
   tags: string[]
   ai_summary: string | null
   ai_patterns: AiPatterns | null
+  package_id: string | null
   created_at: string
   updated_at: string
 }
@@ -70,6 +71,42 @@ export interface AuditLog {
 
 export interface PatientWithSessions extends Patient {
   sessions: Session[]
+}
+
+export type PackageStatus = 'ativo' | 'concluido' | 'expirado'
+
+export type PaymentMethod = 'pix' | 'dinheiro' | 'transferencia' | 'cartao'
+
+export type TransactionStatus = 'pago' | 'pendente'
+
+export interface Package {
+  id: string
+  therapist_id: string
+  patient_id: string
+  name: string
+  total_sessions: number
+  used_sessions: number
+  total_value: number
+  paid_value: number
+  start_date: string
+  expiration_date: string | null
+  status: PackageStatus
+  created_at: string
+  updated_at: string
+}
+
+export interface Transaction {
+  id: string
+  therapist_id: string
+  patient_id: string | null
+  package_id: string | null
+  description: string
+  amount: number
+  payment_method: PaymentMethod
+  status: TransactionStatus
+  payment_date: string
+  notes: string | null
+  created_at: string
 }
 
 export type AppointmentStatus = 'agendado' | 'realizado' | 'cancelado' | 'falta'

@@ -10,16 +10,18 @@ import {
   Users,
   CalendarDays,
   FileText,
+  DollarSign,
   Settings,
   LogOut,
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Pacientes', href: '/patients', icon: Users },
+  { name: 'Clientes', href: '/patients', icon: Users },
   { name: 'Agenda', href: '/agenda', icon: CalendarDays },
-  { name: 'Nova Sessao', href: '/sessions/new', icon: FileText },
-  { name: 'Configuracoes', href: '/settings', icon: Settings },
+  { name: 'Financeiro', href: '/financeiro', icon: DollarSign },
+  { name: 'Nova Sessão', href: '/sessions/new', icon: FileText },
+  { name: 'Configurações', href: '/settings', icon: Settings },
 ]
 
 export function Sidebar() {

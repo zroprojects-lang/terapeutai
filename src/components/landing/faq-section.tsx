@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'Os dados dos meus pacientes estao seguros?',
+    question: 'Os dados dos meus clientes estao seguros?',
     answer: 'Sim. Toda a comunicacao e feita via HTTPS com criptografia TLS. Os dados ficam armazenados no Supabase com Row Level Security — cada terapeuta so acessa seus proprios dados. Estamos em conformidade com a LGPD, incluindo consentimento registrado, audit log e direito a portabilidade dos dados.',
   },
   {
@@ -14,20 +14,20 @@ const faqs = [
     answer: 'Nao. O TerapeutAI e 100% online. Funciona no navegador do computador, tablet ou celular. Nao ha instalacao, nao ha atualizacoes manuais.',
   },
   {
-    question: 'A plataforma segue as normas do CFP?',
-    answer: 'Sim. O prontuario eletronico e compativel com a Resolucao CFP 001/2009. A IA e posicionada como ferramenta de apoio — todas as sugestoes geradas vem com disclaimer claro de que a decisao final e sempre do profissional. Nenhum diagnostico e feito pela IA.',
+    question: 'A plataforma e segura para meus clientes?',
+    answer: 'Sim. A plataforma respeita a LGPD e garante sigilo e seguranca dos dados dos seus clientes. A IA e posicionada como ferramenta de apoio — todas as sugestoes geradas vem com disclaimer claro de que a decisao final e sempre do profissional. Nenhum diagnostico e feito pela IA.',
   },
   {
     question: 'Funciona no celular?',
-    answer: 'Sim. O layout e responsivo e funciona bem em smartphones e tablets. Voce pode registrar sessoes, consultar a agenda e acessar fichas de pacientes diretamente pelo celular.',
+    answer: 'Sim. O layout e responsivo e funciona bem em smartphones e tablets. Voce pode registrar sessoes, consultar a agenda e acessar fichas de clientes diretamente pelo celular.',
   },
   {
     question: 'Como funciona a IA nos prontuarios?',
-    answer: 'Apos registrar as notas de uma sessao, voce pode clicar em "Gerar resumo com IA". A IA analisa o texto, identifica temas principais, pontos de atencao e percebe a evolucao do paciente em relacao ao historico. Os dados sao anonimizados antes de serem enviados para a IA — nome, telefone e email do paciente nunca chegam ao modelo.',
+    answer: 'Apos registrar as notas de uma sessao, voce pode clicar em "Gerar resumo com IA". A IA analisa o texto, identifica temas principais, pontos de atencao e percebe a evolucao do cliente em relacao ao historico. Os dados sao anonimizados antes de serem enviados para a IA — nome, telefone e email do cliente nunca chegam ao modelo.',
   },
   {
     question: 'Posso exportar os dados dos meus pacientes?',
-    answer: 'Sim. Voce pode exportar todos os dados de um paciente a qualquer momento em formato JSON — isso garante a portabilidade de dados exigida pela LGPD. O export inclui ficha completa e historico de todas as sessoes.',
+    answer: 'Sim. Voce pode exportar todos os dados de um cliente a qualquer momento em formato JSON — isso garante a portabilidade de dados exigida pela LGPD. O export inclui ficha completa e historico de todas as sessoes.',
   },
   {
     question: 'Quanto custa?',

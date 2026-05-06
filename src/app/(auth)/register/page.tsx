@@ -76,7 +76,7 @@ export default function RegisterPage() {
     }
 
     toast.success('Conta criada com sucesso!')
-    router.push('/dashboard')
+    router.push('/onboarding')
     router.refresh()
   }
 

@@ -16,7 +16,7 @@ export function Footer() {
               <span className="font-bold text-lg" style={{ color: '#2D2D2D' }}>TerapeutAI</span>
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: '#6B7280' }}>
-              Gestao inteligente para terapeutas e psicologos brasileiros.
+              Gestão inteligente para terapeutas holísticos brasileiros.
             </p>
             <div className="flex gap-2 flex-wrap">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium" style={{ backgroundColor: '#4A7C6F15', color: '#4A7C6F' }}>
@@ -66,13 +66,16 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-4" style={{ color: '#2D2D2D' }}>Legal</h4>
             <ul className="space-y-2">
-              {['Politica de Privacidade', 'Termos de Uso', 'LGPD'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm transition-colors" style={{ color: '#6B7280' }}
+              {[
+                { label: 'Política de Privacidade', href: '/privacidade' },
+                { label: 'Termos de Uso', href: '/termos' },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-sm transition-colors" style={{ color: '#6B7280' }}
                     onMouseEnter={e => (e.currentTarget.style.color = '#4A7C6F')}
                     onMouseLeave={e => (e.currentTarget.style.color = '#6B7280')}>
-                    {item}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

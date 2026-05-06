@@ -10,6 +10,8 @@ import { ArrowLeft, Plus } from 'lucide-react'
 import { MoodChart } from '@/components/charts/mood-chart'
 import { EditPatientDialog } from '@/components/patients/edit-patient-dialog'
 import { DeletePatientDialog } from '@/components/patients/delete-patient-dialog'
+import { PackageList } from '@/components/packages/package-list'
+import { AnamneseForm } from '@/components/patients/anamnese-form'
 
 export default async function PatientDetailPage({
   params,
@@ -37,6 +39,13 @@ export default async function PatientDetailPage({
     .eq('patient_id', id)
     .eq('therapist_id', user.id)
     .order('date', { ascending: false })
+
+  const { data: packages } = await supabase
+    .from('packages')
+    .select('*')
+    .eq('patient_id', id)
+    .eq('therapist_id', user.id)
+    .order('created_at', { ascending: false })
 
   const completedSessions = sessions?.filter((s) => s.status === 'realizada') || []
 
@@ -115,7 +124,9 @@ export default async function PatientDetailPage({
       <Tabs defaultValue="timeline">
         <TabsList>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          <TabsTrigger value="evolution">Evolucao</TabsTrigger>
+          <TabsTrigger value="packages">Pacotes</TabsTrigger>
+          <TabsTrigger value="anamnese">Anamnese</TabsTrigger>
+          <TabsTrigger value="evolution">Evolução</TabsTrigger>
           <TabsTrigger value="info">Dados</TabsTrigger>
         </TabsList>
 
@@ -170,6 +181,21 @@ export default async function PatientDetailPage({
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="packages" className="mt-4">
+          <PackageList
+            packages={packages || []}
+            patientId={id}
+            patientName={patient.name}
+          />
+        </TabsContent>
+
+        <TabsContent value="anamnese" className="mt-4">
+          <AnamneseForm
+            patientId={id}
+            existingData={patient.notes ? (() => { try { return JSON.parse(patient.notes) } catch { return undefined } })() : undefined}
+          />
         </TabsContent>
 
         <TabsContent value="evolution" className="mt-4">

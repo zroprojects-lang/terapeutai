@@ -6,8 +6,8 @@ import { Toaster } from '@/components/ui/sonner'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'TerapeutAI - Gestao Inteligente para Terapeutas',
-  description: 'Plataforma de documentacao e gestao de pacientes com IA para terapeutas holisticos e psicologos',
+  title: 'TerapeutAI - Gestao Inteligente para Terapeutas Holísticos',
+  description: 'Plataforma de gestao de clientes com IA para terapeutas holísticos — Reiki, Constelação Familiar, Florais, Acupuntura. Prontuário, pacotes de sessões e controle financeiro.',
 }
 
 export default function RootLayout({
