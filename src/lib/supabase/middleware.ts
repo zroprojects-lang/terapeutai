@@ -33,6 +33,8 @@ export async function updateSession(request: NextRequest) {
     '/forgot-password',
     '/reset-password',
     '/api/auth',
+    '/api/admin',
+    '/admin',
     '/privacidade',
     '/termos',
   ]
